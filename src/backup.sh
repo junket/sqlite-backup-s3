@@ -5,14 +5,14 @@ set -o pipefail
 
 source ./env.sh
 
-echo "Creating backup of .sqlite files in $SQLITE_DATABASE_DIRECTORY..."
+echo "Creating backup of .db files in $SQLITE_DATABASE_DIRECTORY..."
 
 timestamp=$(date +"%Y-%m-%dT%H:%M:%S")
 
-for file in "$SQLITE_DATABASE_DIRECTORY"/*.sqlite3; do
+for file in "$SQLITE_DATABASE_DIRECTORY"/*.db; do
   database_file_name=$(basename -- "$file")
   database_name="$database_file_name%.*"
-  backup_name="$database_name-backup-$timestamp.sqlite3"
+  backup_name="$database_name-backup-$timestamp.db"
   temp_file="/tmp/$backup_name"
 
   sqlite3 "$database" ".backup $temp_file"
