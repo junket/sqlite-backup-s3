@@ -11,11 +11,11 @@ timestamp=$(date +"%Y-%m-%dT%H:%M:%S")
 
 for file in "$SQLITE_DATABASE_DIRECTORY"/*.db; do
   database_file_name=$(basename -- "$file")
-  database_name="$database_file_name%.*"
+  database_name="${database_file_name%.*}"
   backup_name="$database_name-backup-$timestamp.db"
   temp_file="/tmp/$backup_name"
 
-  sqlite3 "$database" ".backup $temp_file"
+  sqlite3 "$file" ".backup $temp_file"
   gzip "$temp_file"
 
   if [ -n "$PASSPHRASE" ]; then
