@@ -29,14 +29,14 @@ for file in "$SQLITE_DATABASE_DIRECTORY"/*.db; do
 
   date=$(date +"%a, %d %b %Y %T %z")
   content_type='application/tar+gzip'
-  string="PUT\n\n$content_type\n$date\n/$S3_BUCKET$S3_PATH/$file_name"
+  string="PUT\n\n$content_type\n$date\n/$S3_BUCKET/$S3_PREFIX/$file_name"
   signature=$(echo -en "$string" | openssl sha1 -hmac "$AWS_SECRET_ACCESS_KEY" -binary | base64)
   curl -X PUT -T "/tmp/$file_name" \
     -H "Host: $S3_BUCKET.s3.amazonaws.com" \
     -H "Date: $date" \
     -H "Content-Type: $content_type" \
     -H "Authorization: AWS $AWS_ACCESS_KEY_ID:$signature" \
-    "https://$S3_BUCKET.s3.amazonaws.com$S3_PATH/$file_name"
+    "https://$S3_BUCKET.s3.amazonaws.com/$S3_PREFIX/$file_name"
 
   echo "Backup complete."
 
